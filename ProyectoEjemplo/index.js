@@ -1,20 +1,36 @@
-const { env, port } = require("./config")
+const express = require("express")
+const { port } = require("./config")
 
-const http = require("http")
-const server = http.createServer()
+const users = []
 
-server.on('request',(request,response)=>{
+const app = express()
 
-    if(request.method === "POST" && request.url=="/datos"){
-        // TODO: Regresar al momento de ver streams
-    }
 
-    response.statusCode = "200"
-
-    response.end("Hola mundo")
+app.get("/",(req,res)=>{
+    return res.json(users)
 })
 
-server.listen(port)
-console.log("Servidor funcionando en: http://localhost:"+port)
+app.post("/",(req,res)=>{
+    const user = req.body
 
-console.log(env)
+    users.push(user)
+
+    return res.json(users)
+})
+
+app.put("/:id",(req,res)=>{
+    const id = req.params.id
+    
+    return res.json(users)
+})
+
+app.delete("/:id",(req,res)=>{
+    const id = req.params.id
+    users = users.filter(user=>id!==user.id)
+
+    return res.json(users)
+})
+
+app.listen(port,()=>{
+    console.log("Escuchando: http://localhost:"+port)
+})
