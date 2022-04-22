@@ -1,9 +1,11 @@
 const express = require("express")
 const { port } = require("./config")
 
-const users = []
+let users = []
 
 const app = express()
+
+app.use(express.json()) // Middleware para usar un body en JSON
 
 
 app.get("/",(req,res)=>{
@@ -15,13 +17,25 @@ app.post("/",(req,res)=>{
 
     users.push(user)
 
-    return res.json(users)
+    return res.status(201).json(users)
 })
 
 app.put("/:id",(req,res)=>{
-    const id = req.params.id
+    // const id = req.params.id
+    // const body = req.body
+    const {body,params:{id}} = req
+
+    // users = users.map(user=>{
+    //     if(user.id===id){
+    //         return body
+    //     }
+
+    //     return user
+    // })
+
+    users = users.map(user=>user.id===id?body:user)
     
-    return res.json(users)
+    return res.status(201).json(users)
 })
 
 app.delete("/:id",(req,res)=>{
