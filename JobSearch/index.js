@@ -9,6 +9,9 @@ connection()
 
 const app = express()
 
+//Middleware de JSON
+app.use(express.json())
+
 //Usando routes
 users(app)
 
