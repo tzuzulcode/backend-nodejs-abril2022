@@ -16,15 +16,13 @@ function users(app){
         const user = await userServ.create(req.body)
         return res.json(user)
     })
-    router.put("/",(req,res)=>{
-        return res.json({
-            hola:"mundo"
-        })
+    router.put("/:id",async (req,res)=>{
+        const user = await userServ.update(req.params.id,req.body)
+        return res.json(user)
     })
-    router.delete("/",(req,res)=>{
-        return res.json({
-            hola:"mundo"
-        })
+    router.delete("/:id",async (req,res)=>{
+        const user = await userServ.delete(req.params.id)
+        return res.json(user)
     })
 }
 
