@@ -19,7 +19,16 @@ class Users{
 
             return user // Objeto
         }catch(error){
-            console.log(error)
+            if(error.code===11000){
+                const message = `El correo "${error.keyValue.email}" ya está en uso`
+
+                return {
+                    error:true,
+                    message
+                }
+            }
+            
+
         }
     }
 

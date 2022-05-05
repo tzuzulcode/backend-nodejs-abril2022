@@ -12,6 +12,12 @@ function auth(app){
 
         return res.json(token)
     })
+
+    router.post("/signup",async (req,res)=>{
+        const result = await authServ.signup(req.body)
+
+        return res.status(result.error?400:200).json(result)
+    })
 }
 
 module.exports = auth
