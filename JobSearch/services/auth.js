@@ -4,8 +4,23 @@ const { jwtSecret } = require("../config")
 const User = require("./users")
 
 class Auth{
-    login(data){
-        return this.#createToken(data)
+    async login(data){
+        // const email = data.email
+        // const password = data.password
+        const {email,password} = data
+
+        const userServ = new User()
+        const user = await userServ.getByEmail(email)
+
+        if(user && await this.#compare(password,user.password)){
+            return this.#getUserData(user)
+        }
+
+        return {
+            error:true,
+            message:"Las credenciales son incorrectas"
+        }
+
     }
 
     async signup(data){
@@ -18,9 +33,15 @@ class Auth{
             return user
         }
 
+        return this.#getUserData(user)
+
+    }
+
+    #getUserData(user){
         const userData = {
             name:user.name,
             email:user.email,
+            role:user.role,
             id:user.id
         }
 
@@ -29,7 +50,6 @@ class Auth{
             user:userData,
             token
         }
-
     }
 
     #createToken(payload){
@@ -48,6 +68,10 @@ class Auth{
         }catch(error){
             console.log(error)
         }
+    }
+
+    async #compare(string,hash){
+        return await bcrypt.compare(string,hash)
     }
 }
 

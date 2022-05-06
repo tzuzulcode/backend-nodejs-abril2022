@@ -11,6 +11,16 @@ class Users{
             console.log(error)
         }
     }
+    async getByEmail(email){
+        try{
+            const user = await UserModel.findOne({email})
+            // Ya tenemos disponibles los datos
+
+            return user // Objeto
+        }catch(error){
+            console.log(error)
+        }
+    }
 
     async create(data){
         try{
