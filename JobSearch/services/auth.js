@@ -54,7 +54,7 @@ class Auth{
 
     #createToken(payload){
         const token = jwt.sign(payload,jwtSecret,{
-            expiresIn:'7d'
+            expiresIn:60
         })
         return token
     }

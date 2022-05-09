@@ -8,7 +8,7 @@ function users(app){
 
     app.use("/api/users",router)
 
-    router.get("/",authValidation, async (req,res)=>{
+    router.get("/",...authValidation(), async (req,res)=>{
         const users = await userServ.getAll() // Array de usuarios
 
         return res.json(users)
