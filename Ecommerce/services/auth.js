@@ -1,6 +1,8 @@
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const { jwtSecret } = require("../config")
 const validationError = require("../helpers/validationError")
 const User = require("./users")
-const bcrypt = require("bcrypt")
 
 class Auth{
     async login(data){
@@ -14,8 +16,10 @@ class Auth{
         }
 
         return {
-            error:true,
-            message:"Las credenciales son incorrectas"
+            success:false,
+            errors:[{
+                credentials:"Las credenciales son incorrectas"
+            }]
         }
 
     }
@@ -25,15 +29,15 @@ class Auth{
             data.password = await this.#encrypt(data.password)
         }
         const userServ = new User()
-        const user = await userServ.create(data)
-        if(user.error){
+        const result = await userServ.create(data)
+        if(!result.created){
             return {
                 success:false,
-                errors:validationError(user.error)
+                errors:result.errors
             }
         }
 
-        return this.#getUserData(user)
+        return this.#getUserData(result.user)
 
     }
 
@@ -46,6 +50,7 @@ class Auth{
 
         const token = this.#createToken(userData)
         return {
+            succes:true,
             user:userData,
             token
         }
@@ -70,7 +75,11 @@ class Auth{
     }
 
     async #compare(string,hash){
-        return await bcrypt.compare(string,hash)
+        try {
+            return await bcrypt.compare(string,hash)
+        } catch (error) {
+            return false
+        }
     }
 }
 

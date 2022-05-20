@@ -1,9 +1,11 @@
+const duplicatedError = require("../helpers/duplicatedError")
+const validationError = require("../helpers/validationError")
 const UserModel = require("../models/user")
 
 class User{
     async getByEmail(email){
         try {
-            const user = await UserModel.find({email})
+            const user = await UserModel.findOne({email})
 
             return user
         } catch (error) {
@@ -15,11 +17,23 @@ class User{
     async create(data){
         try{
             const user = await UserModel.create(data)
-            return user
+            return {
+                created:true,
+                user
+            }
         }catch(error){
-            console.log(error)
+            if(error.code===11000){
+                return {
+                    created:false,
+                    errors:duplicatedError(error.keyValue)
+                }
+            }
 
-            return {error}
+            // Error en la validacion de datos
+            return {
+                created:false,
+                errors:validationError(error.errors)
+            }
         }
     }
 }

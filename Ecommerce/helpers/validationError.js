@@ -1,4 +1,4 @@
-function validationError({errors}) {
+function validationError(errors) {
     // let messages = []
     // // for(let error of Object.values(errors)){
     // //     messages.push(error.message)
