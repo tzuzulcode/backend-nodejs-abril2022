@@ -1,10 +1,12 @@
 const express = require("express")
 const morgan = require("morgan")
+const cookie = require("cookie-parser")
 const { port } = require("./config")
 const { connection } = require("./config/db")
 
 // Routes:
 const auth = require("./routes/auth")
+const users = require("./routes/users")
 
 const app = express()
 
@@ -16,10 +18,12 @@ connection()
 // Utilizando middleware
 app.use(morgan("dev"))
 app.use(express.json())
+app.use(cookie())
 
 
 // Usando rutas:
 auth(app)
+users(app)
 
 
 app.get("/",(req,res)=>{

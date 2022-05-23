@@ -10,6 +10,7 @@ const userSchema = new Schema({
     },
     password: String,
     role: {
+        default:"applicant",
         type: String,
         enum: ["applicant", "employer", "admin"]
     },

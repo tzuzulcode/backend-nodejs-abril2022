@@ -1,5 +1,4 @@
-const duplicatedError = require("../helpers/duplicatedError")
-const validationError = require("../helpers/validationError")
+const dbError = require("../helpers/dbError")
 const UserModel = require("../models/user")
 
 class User{
@@ -22,18 +21,7 @@ class User{
                 user
             }
         }catch(error){
-            if(error.code===11000){
-                return {
-                    created:false,
-                    errors:duplicatedError(error.keyValue)
-                }
-            }
-
-            // Error en la validacion de datos
-            return {
-                created:false,
-                errors:validationError(error.errors)
-            }
+            return dbError(error)
         }
     }
 }
