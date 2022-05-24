@@ -50,7 +50,7 @@ class Auth{
 
         const token = this.#createToken(userData)
         return {
-            succes:true,
+            success:true,
             user:userData,
             token
         }
