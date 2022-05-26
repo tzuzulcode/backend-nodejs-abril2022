@@ -3,10 +3,12 @@ const morgan = require("morgan")
 const cookie = require("cookie-parser")
 const { port } = require("./config")
 const { connection } = require("./config/db")
+const passport = require("passport")
 
 // Routes:
 const auth = require("./routes/auth")
 const users = require("./routes/users")
+const { useGoogleStrategy } = require("./middleware/authProvider")
 
 const app = express()
 
@@ -19,6 +21,9 @@ connection()
 app.use(morgan("dev"))
 app.use(express.json())
 app.use(cookie())
+app.use(passport.initialize())
+// Usando strategias
+passport.use(useGoogleStrategy())
 
 
 // Usando rutas:

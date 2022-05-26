@@ -1,6 +1,7 @@
 const express = require("express")
 const {authResponse,deleteCookie} = require("../helpers/authResponse")
 const AuhtService = require("../services/auth")
+const passport = require("passport")
 
 function auth(app){
     const router = express.Router()
@@ -20,6 +21,16 @@ function auth(app){
 
     router.get("/logout",(req,res)=>{
         return deleteCookie(res)
+    })
+
+    router.get("/google",passport.authenticate("google",{
+        scope:["email","profile"]
+    }))
+    router.get("/google/callback",passport.authenticate("google"),(req,res)=>{
+        return res.json({
+            success:true,
+            message:"Logged succesfully"
+        })
     })
 }
 
