@@ -2,10 +2,10 @@ const express = require("express")
 const {authResponse,deleteCookie} = require("../helpers/authResponse")
 const AuhtService = require("../services/auth")
 const passport = require("passport")
-
 function auth(app){
     const router = express.Router()
     app.use("/api/auth",router)
+    
     const authServ = new AuhtService()
 
     router.post("/login",async (req,res)=>{
@@ -26,11 +26,11 @@ function auth(app){
     router.get("/google",passport.authenticate("google",{
         scope:["email","profile"]
     }))
-    router.get("/google/callback",passport.authenticate("google"),(req,res)=>{
-        return res.json({
-            success:true,
-            message:"Logged succesfully"
-        })
+    router.get("/google/callback",passport.authenticate("google",{session:false}), async (req,res)=>{
+        const user = req.user.profile
+        console.log(user)
+        const result = await authServ.socialLogin(user)
+        return authResponse(res,result,401)
     })
 }
 

@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { jwtSecret } = require("../config")
-const validationError = require("../helpers/validationError")
 const User = require("./users")
 
 class Auth{
@@ -39,6 +38,20 @@ class Auth{
 
         return this.#getUserData(result.user)
 
+    }
+
+    async socialLogin(data){
+        const userServ = new User()
+        const user = {
+            idProvider:data.id,
+            name:data.displayName,
+            email:data.emails[0].value,
+            profilePic: data.photos[0].value,
+            provider: data.provider
+        }
+        const result = await userServ.getOrCreate(user)
+
+        return this.#getUserData(result)
     }
 
     #getUserData(user){

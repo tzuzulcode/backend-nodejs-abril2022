@@ -7,7 +7,7 @@ const useGoogleStrategy = () =>{
         clientID:oauthClientID,
         clientSecret:oauthClientSecret,
         callbackURL:`${production?callbackURL:callbackURLDev}/api/auth/google/callback`
-    },(accescToken,refreshToken,profile,done)=>{
+    },(accessToken,refreshToken,profile,done)=>{
         done(null,{profile})
     })
 }

@@ -22,7 +22,10 @@ const userSchema = new mongoose.Schema({
     role:{
         type:Number,
         default:1
-    }
+    },
+    profilePic:String,
+    provider:String,
+    idProvider:String
 })
 
 const UserModel = mongoose.model("user",userSchema)

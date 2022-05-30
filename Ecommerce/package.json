@@ -22,7 +22,8 @@
     "mongoose": "^6.3.3",
     "morgan": "^1.10.0",
     "passport": "^0.6.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"

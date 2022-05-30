@@ -15,8 +15,6 @@ const app = express()
 
 connection()
 
-// Cookies. Diferentes tipos de cookies. HTTP Only Cookie
-
 // Utilizando middleware
 app.use(morgan("dev"))
 app.use(express.json())
