@@ -1,5 +1,5 @@
 const express = require("express")
-const {authResponse,deleteCookie} = require("../helpers/authResponse")
+const {authResponse,providerResponse,deleteCookie} = require("../helpers/authResponse")
 const AuhtService = require("../services/auth")
 const passport = require("passport")
 function auth(app){
@@ -30,7 +30,7 @@ function auth(app){
         const user = req.user.profile
         console.log(user)
         const result = await authServ.socialLogin(user)
-        return authResponse(res,result,401)
+        return providerResponse(res,result,401)
     })
 }
 

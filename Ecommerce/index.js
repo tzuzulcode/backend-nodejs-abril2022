@@ -1,6 +1,7 @@
 const express = require("express")
 const morgan = require("morgan")
 const cookie = require("cookie-parser")
+const cors = require("cors")
 const { port } = require("./config")
 const { connection } = require("./config/db")
 const passport = require("passport")
@@ -19,6 +20,10 @@ connection()
 app.use(morgan("dev"))
 app.use(express.json())
 app.use(cookie())
+app.use(cors({
+    origin:["http://localhost:3000"],
+    credentials:true
+}))
 app.use(passport.initialize())
 // Usando strategias
 passport.use(useGoogleStrategy())
@@ -31,7 +36,7 @@ users(app)
 
 app.get("/",(req,res)=>{
     return res.json({
-        name:"Ecommerce"
+        name:"Ecommerce v2"
     })
 })
 
