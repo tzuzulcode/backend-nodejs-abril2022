@@ -1,17 +1,31 @@
-const { oauthClientID, oauthClientSecret, callbackURL, production, callbackURLDev } = require("../config")
+const { oauthClientID, oauthClientSecret, callbackURL, production, callbackURLDev, facebookAppID, facebookAppSecret } = require("../config")
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy
+const FacebookStrategy = require("passport-facebook").Strategy
+
+const callbackUrl = (provider)=>`${production?callbackURL:callbackURLDev}/api/auth/${provider}/callback`
 
 const useGoogleStrategy = () =>{
     return new GoogleStrategy({
         clientID:oauthClientID,
         clientSecret:oauthClientSecret,
-        callbackURL:`${production?callbackURL:callbackURLDev}/api/auth/google/callback`
+        callbackURL:callbackUrl("google")
+    },(accessToken,refreshToken,profile,done)=>{
+        done(null,{profile})
+    })
+}
+
+const useFacebookStrategy = () =>{
+    return new FacebookStrategy({
+        clientID:facebookAppID,
+        clientSecret:facebookAppSecret,
+        callbackURL:callbackUrl("facebook")
     },(accessToken,refreshToken,profile,done)=>{
         done(null,{profile})
     })
 }
 
 module.exports = {
-    useGoogleStrategy
+    useGoogleStrategy,
+    useFacebookStrategy
 }

@@ -16,9 +16,7 @@ class Auth{
 
         return {
             success:false,
-            errors:[{
-                credentials:"Las credenciales son incorrectas"
-            }]
+            errors:["Las credenciales son incorrectas"]
         }
 
     }
