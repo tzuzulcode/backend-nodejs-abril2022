@@ -49,7 +49,16 @@ class Auth{
         }
         const result = await userServ.getOrCreate(user)
 
-        return this.#getUserData(result)
+        if(!result.created){
+
+            // Verificar si el correo está en uso
+            return {
+                success:false,
+                errors:result.errors
+            }
+        }
+
+        return this.#getUserData(result.user)
     }
 
     #getUserData(user){

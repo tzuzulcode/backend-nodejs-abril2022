@@ -1,6 +1,7 @@
 function duplicatedError(error){
     const errors = Object.keys(error).map(field=>({
-        [field]:`The ${field} '${error[field]}' is already in use`
+        message:`The ${field} '${error[field]}' is already in use`,
+        field
     }))
 
     return errors

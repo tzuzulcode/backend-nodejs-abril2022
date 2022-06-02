@@ -24,8 +24,15 @@ const userSchema = new mongoose.Schema({
         default:1
     },
     profilePic:String,
-    provider:String,
-    idProvider:String
+    provider:{
+        local:Boolean,
+        facebook:Boolean,
+        google:Boolean
+    },
+    idProvider:{
+        facebook:String,
+        google:String
+    }
 })
 
 const UserModel = mongoose.model("user",userSchema)

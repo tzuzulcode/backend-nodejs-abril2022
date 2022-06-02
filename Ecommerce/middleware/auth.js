@@ -26,6 +26,8 @@ function validateToken(req,res,next){
 function verifyToken(token,req,res,next){
     try{
         const decoded = jwt.verify(token,jwtSecret)
+        delete decoded.iat
+        delete decoded.exp
         req.user = decoded
 
         return validateRole(req,res,next)

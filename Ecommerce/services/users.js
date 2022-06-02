@@ -17,10 +17,13 @@ class User{
     async getOrCreate(data){
         const user = await UserModel.findOne({provider:data.provider,idProvider:data.idProvider})
         if(user){
-            return user
+            return {
+                created:true,
+                user
+            }
         }
         data.password = uuid.v4()
-        return await UserModel.create(data)
+        return await this.create(data)
     }
 
     async create(data){
