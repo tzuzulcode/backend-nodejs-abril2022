@@ -14,8 +14,23 @@ class User{
         }
     }
 
-    async getOrCreate(data){
-        const user = await UserModel.findOne({provider:data.provider,idProvider:data.idProvider})
+    async getOrCreateByProvider(data){
+        console.log({
+            provider:{
+                [data.provider]:true
+            },
+            idProvider:{
+                [data.provider]:data.idProvider
+            }
+        })
+        let user = await UserModel.findOne({
+            provider:{
+                [data.provider]:true
+            },
+            idProvider:{
+                [data.provider]:data.idProvider
+            }
+        })
         if(user){
             return {
                 created:true,
@@ -23,7 +38,42 @@ class User{
             }
         }
         data.password = uuid.v4()
-        return await this.create(data)
+        const newData ={
+            ...data,
+            provider:{
+                [data.provider]:true
+            },
+            idProvider:{
+                [data.provider]:data.idProvider
+            }
+        }
+        try {
+            user = await UserModel.create(newData)
+
+            return {
+                created:true,
+                user
+            }
+        } catch (error) {
+            if(error.code===11000 && error.keyValue.email){ // Duplicated entry
+                const email = error.keyValue.email
+                const provider = "provider."+data.provider
+                const idProvider = "idProvider."+data.provider
+                user = await UserModel.updateOne({
+                    email
+                },{
+                    [provider]:true,
+                    [idProvider]:data.idProvider
+                },{new:true})
+
+                return {
+                    created:true,
+                    user
+                }
+            }
+
+            return dbError(error)
+        }
     }
 
     async create(data){

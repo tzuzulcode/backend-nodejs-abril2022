@@ -25,6 +25,10 @@ class Auth{
         if(data && data.password){
             data.password = await this.#encrypt(data.password)
         }
+        data.provider = {
+            local:true
+        }
+
         const userServ = new User()
         const result = await userServ.create(data)
         if(!result.created){
@@ -47,7 +51,7 @@ class Auth{
             profilePic: data.photos[0].value,
             provider: data.provider
         }
-        const result = await userServ.getOrCreate(user)
+        const result = await userServ.getOrCreateByProvider(user)
 
         if(!result.created){
 
@@ -66,6 +70,8 @@ class Auth{
             role:user.role,
             name:user.name,
             email:user.email,
+            provider:user.provider,
+            idProvider:user.idProvider,
             id:user.id
         }
 
