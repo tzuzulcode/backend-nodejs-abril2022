@@ -9,7 +9,7 @@ const passport = require("passport")
 // Routes:
 const auth = require("./routes/auth")
 const users = require("./routes/users")
-const { useGoogleStrategy,useFacebookStrategy } = require("./middleware/authProvider")
+const { useGoogleStrategy,useFacebookStrategy,useGitHubStrategy,useTwitterStrategy } = require("./middleware/authProvider")
 
 const app = express()
 
@@ -28,6 +28,8 @@ app.use(passport.initialize())
 // Usando strategias
 passport.use(useGoogleStrategy())
 passport.use(useFacebookStrategy())
+passport.use(useTwitterStrategy())
+passport.use(useGitHubStrategy())
 
 
 // Usando rutas:

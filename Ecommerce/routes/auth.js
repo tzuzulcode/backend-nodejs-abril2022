@@ -50,6 +50,20 @@ function auth(app){
         const result = await authServ.socialLogin(user)
         return providerResponse(res,result,401)
     })
+    router.get("/twitter",passport.authenticate("twitter"))
+    router.get("/twitter/callback",passport.authenticate("twitter",{session:false}), async (req,res)=>{
+        const user = req.user.profile
+        console.log(user)
+        const result = await authServ.socialLogin(user)
+        return providerResponse(res,result,401)
+    })
+    router.get("/github",passport.authenticate("github",{ scope: [ 'user:email' ] }))
+    router.get("/github/callback",passport.authenticate("github",{session:false}), async (req,res)=>{
+        const user = req.user.profile
+        console.log(user)
+        const result = await authServ.socialLogin(user)
+        return providerResponse(res,result,401)
+    })
 }
 
 module.exports = auth

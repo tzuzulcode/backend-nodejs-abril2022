@@ -66,6 +66,14 @@ class User{
                     [idProvider]:data.idProvider
                 },{new:true})
 
+                // {"$set":{
+                // "userObjects":{
+                //     "$mergeObjects":[
+                //     "$userObjects",
+                //     {"newerItem":"newervalue","newestItem":"newestvalue"}
+                //     ]
+                // }
+                // }}
                 return {
                     created:true,
                     user
