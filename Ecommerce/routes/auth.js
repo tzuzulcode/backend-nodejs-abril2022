@@ -51,7 +51,7 @@ function auth(app){
         return providerResponse(res,result,401)
     })
     router.get("/twitter",passport.authenticate("twitter"))
-    router.get("/twitter/callback",passport.authenticate("twitter",{session:false}), async (req,res)=>{
+    router.get("/twitter/callback",passport.authenticate("twitter",{scope:["email"]}), async (req,res)=>{
         const user = req.user.profile
         console.log(user)
         const result = await authServ.socialLogin(user)

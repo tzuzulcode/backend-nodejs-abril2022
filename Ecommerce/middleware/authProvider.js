@@ -44,7 +44,8 @@ const useTwitterStrategy = () =>{
     return new TwitterStrategy({
         consumerKey:twitterConsumerID,
         consumerSecret:twitterConsumerSecret,
-        callbackURL:callbackUrl("twitter")
+        callbackURL:callbackUrl("twitter"),
+        includeEmail:true
     },getProfile)
 }
 
@@ -52,7 +53,8 @@ const useGitHubStrategy = () =>{
     return new GitHubStrategy({
         clientID:githubClientID,
         clientSecret:githubClientSecret,
-        callbackURL:callbackUrl("github")
+        callbackURL:callbackUrl("github"),
+        scope:["user:email"]
     },getProfile)
 }
 

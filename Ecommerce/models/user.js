@@ -27,11 +27,15 @@ const userSchema = new mongoose.Schema({
     provider:{
         local:Boolean,
         facebook:Boolean,
-        google:Boolean
+        google:Boolean,
+        twitter:Boolean,
+        github:Boolean
     },
     idProvider:{
         facebook:String,
-        google:String
+        google:String,
+        twitter:String,
+        github:String
     }
 })
 

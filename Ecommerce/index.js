@@ -1,8 +1,9 @@
 const express = require("express")
+const session = require("express-session")
 const morgan = require("morgan")
 const cookie = require("cookie-parser")
 const cors = require("cors")
-const { port } = require("./config")
+const { port, sessionSecret } = require("./config")
 const { connection } = require("./config/db")
 const passport = require("passport")
 
@@ -24,12 +25,24 @@ app.use(cors({
     origin:["http://localhost:3000"],
     credentials:true
 }))
+app.use(session({
+    secret:sessionSecret,
+    resave:false,
+    saveUninitialized:false
+}))
 app.use(passport.initialize())
 // Usando strategias
 passport.use(useGoogleStrategy())
 passport.use(useFacebookStrategy())
 passport.use(useTwitterStrategy())
 passport.use(useGitHubStrategy())
+
+passport.serializeUser((user,done)=>{
+    done(null,user)
+})
+passport.deserializeUser((user,done)=>{
+    done(null,user)
+})
 
 
 // Usando rutas:

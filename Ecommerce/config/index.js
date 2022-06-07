@@ -6,6 +6,7 @@ const config = {
     production:process.env.NODE_ENV==="production",
     development:process.env.NODE_ENV==="development",
     port:process.env.PORT,
+    sessionSecret:process.env.SESSION_SECRET,
     jwtSecret:process.env.JWT_SECRET,
     dbUsername:process.env.DB_USERNAME,
     dbPassword:process.env.DB_PASSWORD,
