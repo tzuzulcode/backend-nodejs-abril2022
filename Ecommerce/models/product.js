@@ -20,6 +20,10 @@ const productSchema = new mongoose.Schema({
     stock:{
         type:Number,
         required:[true,"stock is required"]
+    },
+    owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"user"
     }
 })
 
