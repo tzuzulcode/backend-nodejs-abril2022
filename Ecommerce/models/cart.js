@@ -1,7 +1,7 @@
 const {mongoose} = require("../config/db")
 
 const cartSchema = new mongoose.Schema({
-    owner:{
+    _id:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"user"
     },
