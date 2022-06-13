@@ -3,9 +3,9 @@ const CartModel = require("../models/cart")
 class Cart{
 
     async getItems(idUser){
-        const result = await CartModel.findById(idUser)
+        const result = await CartModel.findById(idUser).populate("items._id","name price")
 
-        return result.items
+        return result
     }
 
     async addToCart(idUser,idProduct,amount){
@@ -16,7 +16,7 @@ class Cart{
                     amount
                 }
             }
-        },{new:true}).populate("items._id")
+        },{new:true}).populate("items._id","name price")
 
         return result
     }
