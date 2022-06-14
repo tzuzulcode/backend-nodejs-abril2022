@@ -26,6 +26,7 @@ class User{
             }
         }
         let user = await UserModel.findOne(userData)
+        console.log(user)
         if(!user){
             data.password = uuid.v4()
             const newData ={
@@ -34,6 +35,7 @@ class User{
             }
             try {
                 user = await UserModel.create(newData)
+                console.log(user)
                 const cartServ = new CartService()
                 const cart = await cartServ.create(user.id)
             } catch (error) {

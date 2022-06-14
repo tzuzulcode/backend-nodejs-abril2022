@@ -36,8 +36,9 @@ function auth(app){
     }))
     router.get("/google/callback",passport.authenticate("google",{session:false}), async (req,res)=>{
         const user = req.user.profile
-        console.log(user)
         const result = await authServ.socialLogin(user)
+
+        console.log(result)
         return providerResponse(res,result,401)
     })
 

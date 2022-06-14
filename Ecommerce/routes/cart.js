@@ -14,6 +14,12 @@ function cart(app){
         return res.json(result)
     })
 
+    router.get("/pay",authMiddleware(1),async(req,res)=>{
+        const result = await cartServ.pay(req.user.id)
+
+        return res.json(result)
+    })
+
     router.post("/add",authMiddleware(1),async (req,res)=>{
         const {idProduct,amount} = req.body
         const result = await cartServ.addToCart(req.user.id,idProduct,amount)

@@ -22,10 +22,10 @@ function providerResponse(res,result,statusCode){
 
         return res.cookie("token",token,{
             httpOnly:true,
-            secure:production, //Solo disponible a través de https*
+            secure:true, //Solo disponible a través de https*
             sameSite:"none",
             expires:new Date(new Date().setDate(new Date().getDate() + 7))
-        }).redirect("http://localhost:3000")
+        }).redirect("http://localhost:5500")
     }
 
 

@@ -24,14 +24,14 @@ app.use(morgan("dev"))
 app.use(express.json())
 app.use(cookie())
 app.use(cors({
-    origin:["http://localhost:3000"],
+    origin:["http://localhost:3000","http://127.0.0.1:5500"],
     credentials:true
 }))
 app.use(session({
     secret:sessionSecret,
     resave:false,
     saveUninitialized:false
-}))
+}))//Redis
 app.use(passport.initialize())
 // Usando strategias
 passport.use(useGoogleStrategy())

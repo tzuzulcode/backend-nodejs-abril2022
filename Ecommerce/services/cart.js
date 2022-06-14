@@ -1,4 +1,5 @@
 const CartModel = require("../models/cart")
+const PaymentsService = require("./payments")
 
 class Cart{
 
@@ -31,6 +32,21 @@ class Cart{
         },{new:true})
 
         return result
+    }
+
+    async pay(idUser){
+        const {items} = await this.getItems(idUser)
+        console.log(items)
+        const total = items.reduce((result,item)=>{
+            return result+(item._id.price*item.amount)
+        },0)*100
+
+        const paymentsServ = new PaymentsService()
+        const clientSecret = await paymentsServ.createIntent(total)
+        return {
+            success:true,
+            clientSecret
+        }
     }
 
     async create(idUser){

@@ -42,6 +42,7 @@ function verifyToken(token,req,res,next){
 
 
 function validateRole(req,res,next){
+    console.log(req.user)
     if(req.user.role>=req.neededRole){
         return next()
     }
