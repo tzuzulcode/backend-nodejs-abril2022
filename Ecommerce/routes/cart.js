@@ -26,6 +26,13 @@ function cart(app){
 
         return res.json(result)
     })
+
+    router.post("/paymentCompleted",authMiddleware(1),async (req,res)=>{
+        const result = await cartServ.clearCart(req.user.id)
+
+        return res.json(result)
+    })
+
     router.delete("/remove",authMiddleware(1),async (req,res)=>{
         const {idProduct} = req.body
         const result = await cartServ.removeFromCart(req.user.id,idProduct)

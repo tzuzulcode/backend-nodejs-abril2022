@@ -19,11 +19,12 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:[true,"Password is required"]
     },
+    profilePic:String,
     role:{
         type:Number,
         default:1
     },
-    profilePic:String,
+    stripeCustomerID:String,
     provider:{
         local:Boolean,
         facebook:Boolean,

@@ -35,18 +35,34 @@ class Cart{
     }
 
     async pay(idUser){
-        const {items} = await this.getItems(idUser)
-        console.log(items)
-        const total = items.reduce((result,item)=>{
-            return result+(item._id.price*item.amount)
-        },0)*100
+        const result = await this.getItems(idUser)
+        if(result){
+            const total = result.items.reduce((result,item)=>{
+                return result+(item._id.price*item.amount)
+            },0)*100
 
-        const paymentsServ = new PaymentsService()
-        const clientSecret = await paymentsServ.createIntent(total)
-        return {
-            success:true,
-            clientSecret
+            if(total>0){
+                const paymentsServ = new PaymentsService()
+                const clientSecret = await paymentsServ.createIntent(total)
+                return {
+                    success:true,
+                    clientSecret
+                }
+            }else{
+                return {
+                    success:false,
+                    message:"Tu cuenta debe ser mayor a 0"
+                }
+            }
+    
+            
+        }else{
+            return {
+                success:false,
+                message:"Ocurrió un error"
+            }
         }
+        
     }
 
     async create(idUser){
@@ -54,6 +70,14 @@ class Cart{
             _id:idUser,
             items:[]
         })
+
+        return cart
+    }
+
+    async clearCart(idUser){
+        const cart = await CartModel.findByIdAndUpdate(idUser,{
+            items:[]
+        },{new:true})
 
         return cart
     }

@@ -26,7 +26,6 @@ class User{
             }
         }
         let user = await UserModel.findOne(userData)
-        console.log(user)
         if(!user){
             data.password = uuid.v4()
             const newData ={
@@ -35,7 +34,6 @@ class User{
             }
             try {
                 user = await UserModel.create(newData)
-                console.log(user)
                 const cartServ = new CartService()
                 const cart = await cartServ.create(user.id)
             } catch (error) {
@@ -43,7 +41,7 @@ class User{
                     const email = error.keyValue.email
                     const provider = "provider."+data.provider
                     const idProvider = "idProvider."+data.provider
-                    user = await UserModel.updateOne({
+                    user = await UserModel.findOneAndUpdate({
                         email
                     },{
                         [provider]:true,
