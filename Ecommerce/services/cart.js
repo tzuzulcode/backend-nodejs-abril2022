@@ -1,4 +1,5 @@
 const CartModel = require("../models/cart")
+const UserModel = require("../models/user")
 const PaymentsService = require("./payments")
 
 class Cart{
@@ -34,7 +35,7 @@ class Cart{
         return result
     }
 
-    async pay(idUser){
+    async pay(idUser,stripeCustomerID){
         const result = await this.getItems(idUser)
         if(result){
             const total = result.items.reduce((result,item)=>{
@@ -43,7 +44,7 @@ class Cart{
 
             if(total>0){
                 const paymentsServ = new PaymentsService()
-                const clientSecret = await paymentsServ.createIntent(total)
+                const clientSecret = await paymentsServ.createIntent(total,idUser,stripeCustomerID)
                 return {
                     success:true,
                     clientSecret
@@ -74,8 +75,16 @@ class Cart{
         return cart
     }
 
-    async clearCart(idUser){
-        const cart = await CartModel.findByIdAndUpdate(idUser,{
+    // async clearCart(idUser){
+    //     const cart = await CartModel.findByIdAndUpdate(idUser,{
+    //         items:[]
+    //     },{new:true})
+
+    //     return cart
+    // }
+    async clearCart(stripeCustomerID){
+        const user = await UserModel.findOne({stripeCustomerID})
+        const cart = await CartModel.findByIdAndUpdate(user.id,{
             items:[]
         },{new:true})
 

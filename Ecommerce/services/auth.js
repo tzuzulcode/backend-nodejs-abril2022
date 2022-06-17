@@ -72,6 +72,7 @@ class Auth{
             email:user.email,
             provider:user.provider,
             idProvider:user.idProvider,
+            stripeCustomerID:user.stripeCustomerID,
             id:user.id
         }
 

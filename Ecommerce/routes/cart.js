@@ -15,7 +15,7 @@ function cart(app){
     })
 
     router.get("/pay",authMiddleware(1),async(req,res)=>{
-        const result = await cartServ.pay(req.user.id)
+        const result = await cartServ.pay(req.user.id,req.user.stripeCustomerID)
 
         return res.json(result)
     })

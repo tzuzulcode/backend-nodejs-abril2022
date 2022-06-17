@@ -1,6 +1,8 @@
+const { stripeSecretKey } = require("../config")
 const dbError = require("../helpers/dbError")
 const UserModel = require("../models/user")
 const CartService = require("../services/cart")
+const stripe = require("stripe")(stripeSecretKey)
 const uuid = require("uuid")
 
 class User{
@@ -32,11 +34,19 @@ class User{
                 ...data,
                 ...userData
             }
+            let stripeCustomerID
             try {
-                user = await UserModel.create(newData)
-                const cartServ = new CartService()
-                const cart = await cartServ.create(user.id)
+                const customer = await stripe.customers.create({
+                    name:data.name,
+                    email:data.email
+                })
+                stripeCustomerID = customer.id
+                user = await UserModel.create({
+                    ...newData,
+                    stripeCustomerID
+                })
             } catch (error) {
+                const customer = await stripe.customers.del(stripeCustomerID)
                 if(error.code===11000 && error.keyValue.email){ // Duplicated entry
                     const email = error.keyValue.email
                     const provider = "provider."+data.provider
@@ -61,7 +71,6 @@ class User{
                         user
                     }
                 }
-
                 return dbError(error)
             }
         }
@@ -73,8 +82,17 @@ class User{
     }
 
     async create(data){
+        let stripeCustomerID
         try{
-            const user = await UserModel.create(data)
+            const customer = await stripe.customers.create({
+                name:data.name,
+                email:data.email
+            })
+            stripeCustomerID = customer.id
+            const user = await UserModel.create({
+                ...data,
+                stripeCustomerID
+            })
             const cartServ = new CartService()
             const cart = await cartServ.create(user.id)
             return {
@@ -82,6 +100,7 @@ class User{
                 user
             }
         }catch(error){
+            const customer = await stripe.customers.del(stripeCustomerID)
             return dbError(error)
         }
     }
