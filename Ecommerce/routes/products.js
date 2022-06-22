@@ -9,7 +9,9 @@ function products(app){
     app.use("/api/products",router)
 
     router.get("/",async (req,res)=>{
-        const result = await productsServ.getAll()
+        const limit = isNaN(parseInt(req.query.limit)) ? undefined: parseInt(req.query.limit)
+        const page = isNaN(parseInt(req.query.page)) ? undefined: parseInt(req.query.page)
+        const result = await productsServ.getAll(limit,page)
 
         return res.json(result)
     })
