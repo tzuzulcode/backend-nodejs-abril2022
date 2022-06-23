@@ -4,6 +4,9 @@ const endpointSecret = "whsec_2d849de04e6aa72abd49bf02b669777334504a448b75a97e16
 const CartModel = require("../models/cart")
 const UserModel = require("../models/user")
 
+const paypalClient = require("../libs/paypalClient")
+const paypal = require("@paypal/checkout-server-sdk")
+
 class Payments{
     // Payment session
     async createIntent(amount,idUser,stripeCustomerID){
@@ -51,6 +54,40 @@ class Payments{
         return {
             success:true,
             message:"OK"
+        }
+    }
+
+    async createPayPalOrder(idUser){
+        const result = await CartModel.findById(idUser).populate("items._id","name price")
+        const total = result.items.reduce((result,item)=>{
+            return result+(item._id.price*item.amount)
+        },0)
+        
+        const request = new paypal.orders.OrdersCreateRequest()
+        request.headers["Prefer"] = "return=representation"
+        request.requestBody({
+            intent:"CAPTURE",
+            purchase_units:[
+                {
+                    amount:{
+                        currency_code:"USD",
+                        value:total
+                    }
+                }
+            ]
+        })
+
+        const response = await paypalClient.execute(request)
+        if(response.statusCode!==201){
+            return {
+                success:false,
+                message:"An error ocurred"
+            }
+        }
+
+        return {
+            success:true,
+            orderID: response.result.id
         }
     }
 }

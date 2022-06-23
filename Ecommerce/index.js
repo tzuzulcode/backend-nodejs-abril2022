@@ -12,6 +12,7 @@ const auth = require("./routes/auth")
 const users = require("./routes/users")
 const products = require("./routes/products")
 const cart = require("./routes/cart")
+const payments = require("./routes/payments")
 const webhooks = require("./routes/webhooks")
 const { useGoogleStrategy,useFacebookStrategy,useGitHubStrategy,useTwitterStrategy } = require("./middleware/authProvider")
 
@@ -54,6 +55,7 @@ auth(app)
 users(app)
 products(app)
 cart(app)
+payments(app)
 webhooks(app)
 
 
