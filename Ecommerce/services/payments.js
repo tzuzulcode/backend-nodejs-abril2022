@@ -84,10 +84,29 @@ class Payments{
                 message:"An error ocurred"
             }
         }
-
+        console.log(response.result)
+        // Almacenar orderID
+        const user = await UserModel.findByIdAndUpdate(idUser,{
+            paypalOrderId:response.result.id
+        })
         return {
             success:true,
             orderID: response.result.id
+        }
+    }
+
+    async confirmPayPal(data){
+        console.log(data.resource.id)
+        switch (data.event_type) {
+            case 'PAYMENT.CAPTURE.COMPLETED':
+                const orderID = data.resource.id
+                const user = await UserModel.findOne({paypalOrderId:orderID})
+                console.log(user)
+                // Realizar con el servicio correspondiente
+                const cart = await CartModel.findByIdAndUpdate(user.id,{
+                    items:[]
+                },{new:true})
+            break;
         }
     }
 }

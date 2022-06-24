@@ -15,6 +15,11 @@ function webhooks(app){
 
         return res.status(result.success?200:400).json(result)
     })
+    router.post("/paypal",async (req,res)=>{
+        console.log(req.body)
+        await paymentServ.confirmPayPal(req.body)
+        return res.status(200).send("OK")
+    })
 }
 
 module.exports = webhooks

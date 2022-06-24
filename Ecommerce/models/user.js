@@ -37,7 +37,8 @@ const userSchema = new mongoose.Schema({
         google:String,
         twitter:String,
         github:String
-    }
+    },
+    paypalOrderId:String
 })
 
 const UserModel = mongoose.model("user",userSchema)
