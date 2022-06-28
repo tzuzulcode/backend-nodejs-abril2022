@@ -5,9 +5,14 @@ const PaymentsService = require("./payments")
 class Cart{
 
     async getItems(idUser){
-        const result = await CartModel.findById(idUser).populate("items._id","name price")
-
-        return result
+        const result = await CartModel.findById(idUser).populate("items._id","name price images")
+        const products = result.items.map(product=>{
+            return {
+                ...product._id._doc,
+                amount:product.amount
+            }
+        })
+        return products
     }
 
     async addToCart(idUser,idProduct,amount){
@@ -18,9 +23,14 @@ class Cart{
                     amount
                 }
             }
-        },{new:true}).populate("items._id","name price")
-
-        return result
+        },{new:true}).populate("items._id","name price images")
+        const products = result.items.map(product=>{
+            return {
+                ...product._id._doc,
+                amount:product.amount
+            }
+        })
+        return products
     }
 
     async removeFromCart(idUser,idProduct){
@@ -30,16 +40,21 @@ class Cart{
                     _id:idProduct
                 }
             }
-        },{new:true})
-
-        return result
+        },{new:true}).populate("items._id","name price images")
+        const products = result.items.map(product=>{
+            return {
+                ...product._id._doc,
+                amount:product.amount
+            }
+        })
+        return products
     }
 
     async pay(idUser,stripeCustomerID){
         const result = await this.getItems(idUser)
         if(result){
-            const total = result.items.reduce((result,item)=>{
-                return result+(item._id.price*item.amount)
+            const total = result.reduce((result,item)=>{
+                return result+(item.price*item.amount)
             },0)*100
 
             if(total>0){

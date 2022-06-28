@@ -11,6 +11,14 @@ class Products{
 
         return products
     }
+
+    async getAllByUser(limit=20,page=1,ownerId){
+        console.log(ownerId)
+        const products = await paginate("/api/products",limit,page,ProductModel,{owner:ownerId})
+
+        return products
+    }
+
     async create(data){
         const product = await ProductModel.create(data)
 
