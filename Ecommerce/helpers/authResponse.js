@@ -25,7 +25,7 @@ function providerResponse(res,result,statusCode){
             secure:true, //Solo disponible a través de https*
             sameSite:"none",
             expires:new Date(new Date().setDate(new Date().getDate() + 7))
-        }).redirect("http://localhost:5500")
+        }).redirect("http://localhost:3000")
     }
 
 

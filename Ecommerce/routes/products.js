@@ -34,6 +34,12 @@ function products(app){
 
         return res.json(result)
     })
+
+    router.delete("/:id",authMiddleware(1),async (req,res)=>{
+        const result = await productsServ.delete(req.params.id,req.user.id)
+
+        return res.status(result.success?200:403).json(result)
+    })
 }
 
 

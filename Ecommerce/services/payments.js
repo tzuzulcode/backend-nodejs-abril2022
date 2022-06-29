@@ -1,5 +1,7 @@
-const { stripeSecretKey } = require("../config")
+const { stripeSecretKey, mercadoPagoSecretKey } = require("../config")
 const stripe = require("stripe")(stripeSecretKey)
+const mercadopago = require('mercadopago');
+mercadopago.configurations.setAccessToken(mercadoPagoSecretKey);
 const endpointSecret = "whsec_2d849de04e6aa72abd49bf02b669777334504a448b75a97e166203f8fb714ffe";
 const CartModel = require("../models/cart")
 const UserModel = require("../models/user")
@@ -109,6 +111,23 @@ class Payments{
         //         },{new:true})
         //     break;
         // }
+    }
+
+    async createPayment(idUser,email,type){
+        const result = await CartModel.findById(idUser).populate("items._id","name price")
+        const total = result.items.reduce((result,item)=>{
+            return result+(item._id.price*item.amount)
+        },0)
+        const data = await mercadopago.payment.create({
+            transaction_amount: total,
+            description: 'Pago de productos',
+            payment_method_id: type,
+            payer: {
+              email: email
+            }
+        })
+
+        console.log(data)
     }
 }
 
