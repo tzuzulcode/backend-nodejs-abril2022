@@ -26,6 +26,14 @@ function products(app){
         return res.json(result)
     })
 
+    router.get("/one/:id",async (req,res)=>{
+        const id = req.params.id
+
+        const result = await productsServ.getOne(id)
+
+        return res.json(result)
+    })
+
     router.post("/",authMiddleware(1),async (req,res)=>{
         const result = await productsServ.create({
             ...req.body,

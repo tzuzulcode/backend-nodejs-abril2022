@@ -2,7 +2,7 @@ const { stripeSecretKey, mercadoPagoSecretKey } = require("../config")
 const stripe = require("stripe")(stripeSecretKey)
 const mercadopago = require('mercadopago');
 mercadopago.configurations.setAccessToken(mercadoPagoSecretKey);
-const endpointSecret = "whsec_2d849de04e6aa72abd49bf02b669777334504a448b75a97e166203f8fb714ffe";
+const endpointSecret = "whsec_iiddyKfZnQ1qqBbF341STmZLsCz2Ftam";
 const CartModel = require("../models/cart")
 const UserModel = require("../models/user")
 
@@ -113,21 +113,42 @@ class Payments{
         // }
     }
 
-    async createPayment(idUser,email,type){
+    // 
+    async listPaymentMethodsMercadoPago(){
+        var response = await mercadopago.payment_methods.listAll();
+        var payment_methods = response.body;
+
+        return payment_methods
+    }
+
+    async createPaymentMercadoPago(idUser,email,type){
         const result = await CartModel.findById(idUser).populate("items._id","name price")
         const total = result.items.reduce((result,item)=>{
             return result+(item._id.price*item.amount)
         },0)
-        const data = await mercadopago.payment.create({
-            transaction_amount: total,
-            description: 'Pago de productos',
-            payment_method_id: type,
-            payer: {
-              email: email
+        console.log(type)
+        try {
+            const data = await mercadopago.payment.create({
+                transaction_amount: total,
+                description: 'Pago de productos',
+                payment_method_id: type,
+                payer: {
+                  email: email
+                }
+            })
+    
+            console.log(data)
+            return {
+                success:true,
+                paymentURL:data.body?.transaction_details?.external_resource_url
             }
-        })
-
-        console.log(data)
+        } catch (error) {
+            console.log(error.message)
+            return {
+                success:false,
+                message:"An error ocurred"
+            }
+        }
     }
 }
 

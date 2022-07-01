@@ -9,7 +9,7 @@ class Cart{
         console.log(result)
         const products = result.items.map(product=>{
             return {
-                ...product._id._doc,
+                ...product._id?._doc,
                 amount:product.amount
             }
         })
@@ -27,7 +27,7 @@ class Cart{
         },{new:true}).populate("items._id","name price images")
         const products = result.items.map(product=>{
             return {
-                ...product._id._doc,
+                ...product._id?._doc,
                 amount:product.amount
             }
         })
@@ -44,7 +44,7 @@ class Cart{
         },{new:true}).populate("items._id","name price images")
         const products = result.items.map(product=>{
             return {
-                ...product._id._doc,
+                ...product._id?._doc,
                 amount:product.amount
             }
         })
@@ -89,6 +89,24 @@ class Cart{
         })
 
         return cart
+    }
+
+    async changeAmount(idUser,idProduct,amount){
+        const result = await CartModel.findOneAndUpdate({_id: idUser},
+        {$set: {"items.$[el].amount": amount } },
+        { 
+          arrayFilters: [{ "el._id": idProduct}],
+          new: true
+        }).populate("items._id","name price images")
+
+        const products = result.items.map(product=>{
+            return {
+                ...product._id?._doc,
+                amount:product.amount
+            }
+        })
+
+        return products
     }
 
     // async clearCart(idUser){

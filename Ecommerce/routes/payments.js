@@ -13,6 +13,18 @@ function payments(app){
 
         return res.json(result)
     })
+
+    router.get("/availableMercadoPagoMethods",async (req,res)=>{
+        const result = await paymentsServ.listPaymentMethodsMercadoPago()
+
+        return res.json(result)
+    })
+
+    router.post("/createPaymentMercadoPago",authMiddleware(1), async (req,res)=>{
+        const result = await paymentsServ.createPaymentMercadoPago(req.user.id,req.user.email,req.body.type)
+
+        return res.json(result)
+    })
 }
 
 module.exports = payments

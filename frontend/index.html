@@ -18,6 +18,19 @@
         </button>
     </form>
 
+    <form id="form-checkout">
+        <div id="form-checkout__cardNumber-container" class="container"></div>
+        <div id="form-checkout__expirationDate-container" class="container"></div>
+        <input type="text" name="cardholderName" id="form-checkout__cardholderName"/>
+        <input type="email" name="cardholderEmail" id="form-checkout__cardholderEmail"/>
+        <div id="form-checkout__securityCode-container" class="container"></div>
+        <select name="issuer" id="form-checkout__issuer"></select>
+        <input type="text" name="identificationNumber" id="form-checkout__identificationNumber"/>
+        <select name="installments" id="form-checkout__installments"></select>
+        <button type="submit" id="form-checkout__submit">Pagar</button>
+        <progress value="0" class="progress-bar">Cargando...</progress>
+      </form>
+
     <div id="paypal-buttons"></div>
 
     <button id="loadPayment">Cargar formulario stripe</button>

@@ -20,6 +20,12 @@ class Products{
         return products
     }
 
+    async getOne(idProduct){
+        const product = await ProductModel.findById(idProduct)
+
+        return product
+    }
+
     async create(data){
         const product = await ProductModel.create(data)
 
