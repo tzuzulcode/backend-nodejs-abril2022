@@ -3,14 +3,14 @@ const server = require("http").createServer()
 
 function readFile(){
     // readable stream
-    const file = fs.createReadStream("./intro.mp4") // Cuando ya existe un archivo y queremos leerlo
+    const file = fs.createReadStream("./static/intro.mp4") // Cuando ya existe un archivo y queremos leerlo
 
     file.pipe(process.stdout) // Consumir stream: Hacer que fluyan los datos
 }
 
 function writeFile(){
     // Writable stream
-    const file = fs.createWriteStream("./file.txt")
+    const file = fs.createWriteStream("./static/file.txt")
 
     for(let i = 0; i<600000;i++){
         file.write(`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque aliquet porta magna. In vel elementum eros. Phasellus pulvinar, odio iaculis pretium interdum, diam nulla ornare nulla, eget sagittis ipsum lorem non nibh. Nullam non egestas enim. Aenean varius ut nisl non tincidunt. Phasellus faucibus ante ligula, et viverra ex posuere in. Mauris aliquam placerat elit, id fringilla odio dictum consequat. Maecenas metus ex, vehicula id metus et, porta viverra leo. Nulla sed commodo risus, ac suscipit magna.
@@ -42,7 +42,7 @@ server.on('request',(req,res)=>{
     //         res.end(data)
     //     }
     // })
-    const file = fs.createReadStream('./intro.mp4')
+    const file = fs.createReadStream('./static/intro.mp4')
 
     file.pipe(res)
 })
