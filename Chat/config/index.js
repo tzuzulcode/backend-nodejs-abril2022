@@ -9,7 +9,8 @@ const config = {
     dbUsername:process.env.DB_USERNAME, 
     dbPassword:process.env.DB_PASSWORD, 
     dbHost:process.env.DB_HOST, 
-    dbName:process.env.DB_NAME
+    dbName:process.env.DB_NAME,
+    awsBucketName:process.env.AWS_BUCKET_NAME
 }
 
 module.exports = config
