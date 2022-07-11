@@ -11,11 +11,17 @@ class Files{
         // Reto
         // s3.getObject()
         try {
-            const result = await s3.getObject({
+            // Download: By buffer
+            // const result = await s3.getObject({
+            //     Key:fileName,
+            //     Bucket:awsBucketName,
+            // })
+
+            // By stream
+            const result = s3.getObject({
                 Key:fileName,
-                Bucket:awsBucketName
-            }).promise()
-            
+                Bucket:awsBucketName,
+            }).createReadStream()
 
             return {
                 success:true,
@@ -39,7 +45,7 @@ class Files{
             const result = await s3.upload({
                 Bucket:awsBucketName,
                 Key,
-                Body:file //Buffer
+                Body:file //Buffer o stream
             }).promise()
 
             console.log(result)

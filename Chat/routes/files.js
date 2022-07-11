@@ -15,13 +15,16 @@ function files(app){
         const result = await filesServ.download(fileName)
 
         if(result.success){
-            // readableStream.pipe(req)
-            return res.end(result.data.Body)
+            // readableStream.pipe(res)
+            // return res.end(result.data.Body)
+            result.data.pipe(res)
+            result.data.on("end",()=>{
+                console.log("Finished")
+            })
+        }else{
+            return res.status(400).json(result)
         }
-        
-        // reto: descargar archivo mediante streams
 
-        return res.status(400).json(result)
     })
     router.post("/",async (req,res)=>{
         let promise
