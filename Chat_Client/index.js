@@ -1,6 +1,9 @@
-const socket = io.connect("http://localhost:4000")
+const socket = io.connect("http://localhost:4000",{
+    withCredentials:true
+})
 
 const login = document.getElementById("login")
+const loginAuth = document.getElementById("loginAuth")
 const sendForm = document.getElementById("sendMessage")
 
 sendForm.onsubmit = (event)=>{
@@ -8,6 +11,26 @@ sendForm.onsubmit = (event)=>{
     const {message,idSocket} = event.target
 
     socket.emit("send_message",idSocket.value,message.value)
+}
+
+loginAuth.onsubmit = (event)=>{
+    event.preventDefault()
+    const {email,password} = event.target
+    fetch("http://localhost:4000/api/auth/login",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            email:email.value,
+            password:password.value
+        }),
+        credentials:"include"
+    })
+    .then(result=>result.json())
+    .then(data=>{
+        console.log(data)
+    })
 }
 
 login.onsubmit = (event)=>{

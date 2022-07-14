@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const { port } = require("./config")
 const {connection} = require("./config/db")
+const cookie = require("cookie-parser")
 
 // Routers
 const auth = require("./routes/auth")
@@ -20,6 +21,7 @@ app.use(cors({
     origin:["http://localhost:5500","http://127.0.0.1:5500"],
     credentials:true
 }))
+app.use(cookie())
 
 app.use(express.json())
 

@@ -55,6 +55,11 @@ class Auth{
             token
         }
     }
+    static validate(token){
+        const user = jwt.verify(token,jwtSecret)
+
+        return user
+    }
 
     #createToken(payload){
         const token = jwt.sign(payload,jwtSecret,{
