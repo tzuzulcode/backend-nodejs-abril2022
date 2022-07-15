@@ -2,6 +2,13 @@ const dbError = require("../helpers/dbError")
 const UserModel = require("../models/user")
 
 class User{
+
+    async getAll(){
+        const users = await UserModel.find()
+
+        return users
+    }
+
     async getByEmail(email){
         try {
             const user = await UserModel.findOne({email})

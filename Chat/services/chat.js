@@ -10,22 +10,25 @@ class Chat{
         io.on("connection",(socket)=>{
             console.log("Client connected")
             
-            socket.on("user_connected",(idUser)=>{
+            socket.on("user_connected",()=>{
                 const cookies = socket.handshake.headers.cookie
-                const {token}=cookie.parse(cookies)
-                if(token){
-                    const user = AuthService.validate(token)
-                    console.log(user)
-                    users.push({
-                        idUser:user.id,
-                        idSocket:socket.id
-                    })
-                    socket.idUser = user.id
-    
-                    console.log(users)
-    
-                    io.emit("user_connected",users)
+                if(cookies){
+                    const {token}=cookie.parse(cookies)
+                    if(token){
+                        const user = AuthService.validate(token)
+                        // console.log(user)
+                        users.push({
+                            idUser:user.id,
+                            idSocket:socket.id
+                        })
+                        socket.idUser = user.id
+        
+                        // console.log(users)
+        
+                        io.emit("user_connected",users)
+                    }
                 }
+                
             })
 
             socket.on("disconnect",()=>{
@@ -40,20 +43,60 @@ class Chat{
                 io.to(socket.id).emit("messages",messages)
             })
 
-            socket.on("send_message",(idSocket,message)=>{
-                console.log("Sending message...",idSocket,message)
-                socket.to(idSocket).emit("received_message",{
-                    senderSocketId:socket.id,
-                    senderId:socket.idUser,
-                    message
-                })
-                io.to(socket.id).emit("sended_message",{
-                    senderSocketId:socket.id,
-                    senderId:socket.idUser,
-                    message
-                })
+            socket.on("send_message",async (content)=>{
+                console.log("Sending message...",content)
+
+                const chat = await this.sendMessage(socket.idChat , socket.idUser ,content)
+                console.log(chat)
+
+                const {idUserOne,idUserTwo} = chat
+
+                const receiverID = socket.idUser===idUserOne ? idUserTwo.toString():idUserOne.toString()
+
+                console.log(receiverID)
+
+                const receiverConnected = users.find(user=>user.idUser===receiverID)
+                console.log(receiverConnected)
+                if(receiverConnected){
+                    socket.to(receiverConnected.idSocket).emit("received_message",{
+                        senderId:socket.idUser,
+                        content
+                    })
+                }
+                io.to(socket.id).emit("sended_message",chat)
             })
         })
+    }
+
+    async getMyChats(idUser){
+        const chats = await ChatModel.find({
+            $or:[{idUserOne:idUser},{idUserTwo:idUser}]
+        })
+
+        return chats
+    }
+
+    async create(idUserOne,idUserTwo){
+        const chat = await ChatModel.create({
+            idUserOne,
+            idUserTwo
+        })
+
+        return chat
+    }
+
+    async sendMessage(idChat,idSender,content){
+        const chat = await ChatModel.findByIdAndUpdate(idChat,{
+            $push:{
+                messages:{
+                    content,
+                    idSender,
+                    isFile:false
+                }
+            }
+        },{new:true})
+
+        return chat
     }
 }
 

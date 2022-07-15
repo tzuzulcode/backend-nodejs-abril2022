@@ -8,6 +8,7 @@ const cookie = require("cookie-parser")
 const auth = require("./routes/auth")
 const files = require("./routes/files")
 const chat = require("./routes/chat")
+const users = require("./routes/users")
 
 connection()
 
@@ -27,7 +28,8 @@ app.use(express.json())
 
 auth(app)
 files(app)
-chat(server)
+users(app)
+chat(server,app)
 
 app.get("/",(req,res)=>{
     return res.json({
